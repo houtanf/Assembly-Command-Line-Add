@@ -16,7 +16,7 @@ _start:
   xor r15, r15    # zero out to use as accumilator
 loop:
   dec r12
-  test r12, 0
+  test r12, r12   # check if index is at 0
   jz return       # info no arguments left, jump to end
 
   mov rdi, qword ptr [rbx + 8 * r12] # move char* base
@@ -36,10 +36,10 @@ return:
 my_atoi:
   mov r11, rdi
 find_null:      # loop till r11 points to string terminating char
-  test byte ptr [r11], 0
-  jz parse_init
+  cmp byte ptr [r11], 0
+  je parse_init
   inc r11
-  jnz find_null
+  jmp find_null
 
 parse_init:
   xor rax, rax    # zero out accumilator

@@ -3,36 +3,8 @@
 
 .intel_syntax noprefix
 .section .text
-.globl my_atoi
-
-my_atoi:
-  mov r11, rdi
-find_null:      # loop till r11 points to string terminating char
-  cmp byte ptr [r11], 0
-  je parse_init
-  inc r11
-  jnz find_null
-
-parse_init:
-  xor rax, rax    # zero out accumilator
-  mov r10, 1      # muiltiplication factor
-  
-parse_loop:
-  dec r11
-  movzx rcx, byte ptr [r11]
-
-  sub rcx, 48     # char digit to int
-  imul rcx, r10
-  add rax, rcx
-  imul r10, 10
-
-  cmp rdi, r11
-  jne parse_loop
-
-  ret
-  
-
 .globl _start
+.globl my_atoi
 
 _start:
   mov r12, qword ptr [rsp]  # move argc into rdx
@@ -62,3 +34,31 @@ return:
   mov rdi, r15    # set result as return code
   mov rax, 60
   syscall
+
+
+my_atoi:
+  mov r11, rdi
+find_null:      # loop till r11 points to string terminating char
+  cmp byte ptr [r11], 0
+  je parse_init
+  inc r11
+  jnz find_null
+
+parse_init:
+  xor rax, rax    # zero out accumilator
+  mov r10, 1      # muiltiplication factor
+  
+parse_loop:
+  dec r11
+  movzx rcx, byte ptr [r11]
+
+  sub rcx, 48     # char digit to int
+  imul rcx, r10
+  add rax, rcx
+  imul r10, 10
+
+  cmp rdi, r11
+  jne parse_loop
+
+  ret
+  
